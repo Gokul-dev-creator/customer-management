@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 Bootstrap 4 Theme (optional, for better styling with Bootstrap) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha512-kq3FES+RuuGoBW3a9R2ELYNBrcK7RGTPb0mfsEvelY3QLJGczG9_0qR1syDk5kM5fG7DpewxkMiVzP8_LwP_eQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="Icon" href=""
+    <title>{% block title %}Cable Operator Portal{% endblock %}</title>
+    <style>
+        body { padding-top: 5rem; }
+        .main-content { margin-top: 20px; }
+        .table th, .table td { vertical-align: middle; }
+        .navbar-brand .fas { margin-right: 5px; }
+        /* Ensure Select2 dropdown appears above other elements if needed */
+        .select2-container { z-index: 1050; } /* Adjust if necessary, Bootstrap modal z-index is 1050 */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fas fa-tv"></i> CablePro</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                </li>
+                <li class="nav-item {% if request.endpoint == 'customers_list' or request.endpoint == 'add_customer' or request.endpoint == 'edit_customer' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('customers_list') }}"><i class="fas fa-users"></i> Manage Customers</a>
+                </li>
+                <li class="nav-item {% if request.endpoint == 'record_payment' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('record_payment') }}"><i class="fas fa-money-check-alt"></i> Record Payment</a>
+                </li>
+                 <li class="nav-item {% if request.endpoint == 'payments_log' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('payments_log') }}"><i class="fas fa-history"></i> Payments Log</a>
+                </li>
+                <li class="nav-item {% if request.endpoint == 'reports_page' or request.endpoint == 'outstanding_payments_report' or request.endpoint == 'collections_report' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('reports_page') }}"><i class="fas fa-chart-bar"></i> Reports</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main role="main" class="container main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- jQuery is needed for Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {% block scripts %}{% endblock %} <!-- Your page-specific scripts will go here -->
+</body>
+</html>
