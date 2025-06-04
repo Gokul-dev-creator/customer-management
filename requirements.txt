@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 gunicorn
 waitress
+fontawesomefree==version_number
