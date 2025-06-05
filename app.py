@@ -8,6 +8,14 @@ from sqlalchemy import or_, func # Removed 'and_' and 'extract' as not directly 
 # --- App Configuration ---
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'a_very_secret_key_for_dev') # Important for sessions/flashing
+
+DATABASE_DIR = os.environ.get('RENDER_DISK_PATH', BASE_DIR) # RENDER_DISK_PATH will be set on Render
+DATABASE_PATH = os.path.join(DATABASE_DIR, "cable_app.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(BASE_DIR, "cable_app.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
