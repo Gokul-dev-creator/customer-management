@@ -9,11 +9,11 @@ from sqlalchemy import or_, func # Removed 'and_' and 'extract' as not directly 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'a_very_secret_key_for_dev') # Important for sessions/flashing
 
-DATABASE_DIR = os.environ.get('RENDER_DISK_PATH', BASE_DIR) # RENDER_DISK_PATH will be set on Render
-DATABASE_PATH = os.path.join(DATABASE_DIR, "cable_app.db")
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+
+
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -54,7 +54,7 @@ class Customer(db.Model):
     connection_date = db.Column(db.Date, nullable=True)
     status = db.Column(db.String(20), default='Active', nullable=False) # Active, Inactive, Suspended
     notes = db.Column(db.Text, nullable=True)
-    
+
     payments = db.relationship('Payment', backref='customer', lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
@@ -83,14 +83,14 @@ class Payment(db.Model):
 @app.route('/')
 def index():
     search_term_home = request.args.get('search_home', '').strip()
-    
+
     total_customers_count = Customer.query.count()
     active_customers_count = Customer.query.filter_by(status='Active').count()
-    
+
     current_month, current_year = get_current_billing_period()
-    
+
     active_customer_ids = [c.id for c in Customer.query.filter_by(status='Active').with_entities(Customer.id).all()]
-    
+
     paid_this_month_ids = [
         p.customer_id for p in Payment.query.filter(
             Payment.customer_id.in_(active_customer_ids),
@@ -99,7 +99,7 @@ def index():
         ).with_entities(Payment.customer_id).distinct().all()
     ]
     outstanding_payments_count = len(active_customer_ids) - len(paid_this_month_ids)
-            
+
     collections_today_val = db.session.query(func.sum(Payment.amount_paid)).filter(
         Payment.payment_date == date.today()
     ).scalar() or 0.0
@@ -113,7 +113,7 @@ def index():
                 Customer.set_top_box_number.ilike(search_like)
             )
         )
-    
+
     customers_on_home_db = customers_query.all()
     customers_list_on_home = []
     for cust in customers_on_home_db:
@@ -126,7 +126,7 @@ def index():
             'status': cust.status,
             'paid_current_month': paid_current_month
         })
-        
+
     return render_template('index.html',
                            total_customers_count=total_customers_count,
                            active_customers_count=active_customers_count,
@@ -181,7 +181,7 @@ def add_customer():
                     parsed_conn_date_on_error = datetime.strptime(conn_date_str_on_error, '%Y-%m-%d').date()
                 except ValueError:
                     flash('Invalid connection date format. It was ignored.', 'warning')
-            
+
             customer_data_for_template = {
                 'name': request.form.get('name'),
                 'phone_number': request.form.get('phone_number'),
@@ -229,7 +229,7 @@ def add_customer():
             db.session.rollback()
             flash(f'Error adding customer: {str(e)}', 'danger')
         return redirect(url_for('customers_list'))
-    
+
     return render_template('add_customer.html', is_edit=False, customer=None, today_date=date.today().isoformat())
 
 @app.route('/customer/edit/<int:customer_id>', methods=['GET', 'POST'])
@@ -273,7 +273,7 @@ def edit_customer(customer_id):
         customer.connection_date = conn_date
         customer.status = request.form.get('status')
         customer.notes = request.form.get('notes')
-        
+
         try:
             db.session.commit()
             flash('Customer updated successfully!', 'success')
@@ -281,7 +281,7 @@ def edit_customer(customer_id):
             db.session.rollback()
             flash(f'Error updating customer: {str(e)}', 'danger')
         return redirect(url_for('customers_list'))
-    
+
     return render_template('add_customer.html', is_edit=True, customer=customer, today_date=date.today().isoformat())
 
 
@@ -338,7 +338,7 @@ def record_payment():
             customer = Customer.query.get(customer_id)
             if not customer:
                 flash('Selected customer not found.', 'danger')
-        
+
         pay_date = None
         if payment_date_str:
             try:
@@ -409,7 +409,7 @@ def record_payment():
             db.session.rollback()
             flash(f'Error recording payment: {str(e)}', 'danger')
             # Fall through to re-render form
-        
+
     all_customers = Customer.query.order_by(Customer.name).all()
     now = datetime.now()
     return render_template('record_payment.html',
@@ -428,15 +428,15 @@ def record_payment():
 def payments_log():
     page = request.args.get('page', 1, type=int)
     search_customer_name = request.args.get('customer_name', '').strip()
-    
+
     query = Payment.query.join(Customer).order_by(Payment.payment_date.desc(), Payment.id.desc())
-    
+
     if search_customer_name:
         search_like = f"%{search_customer_name}%"
         query = query.filter(Customer.name.ilike(search_like))
-        
+
     payments_pagination = query.paginate(page=page, per_page=15) 
-    
+
     return render_template('payments_log.html',
                            payments=payments_pagination,
                            search_customer_name=search_customer_name)
@@ -455,7 +455,7 @@ def outstanding_payments_report():
     if report_month_str:
         try: report_month = int(report_month_str)
         except ValueError: flash("Invalid month selected, defaulting to current.", "warning")
-    
+
     report_year = now.year
     if report_year_str:
         try: report_year = int(report_year_str)
@@ -473,14 +473,14 @@ def outstanding_payments_report():
         Customer.status == 'Active',
         Customer.id.notin_(paid_customer_ids_subquery)
     )
-    
+
     # Handle the case where form is just loaded vs. submitted
     # If month and year are explicitly passed (form submitted), then query.
     # Otherwise, show empty or default. The template shows a form first.
     outstanding_customers = []
     if request.args.get('month') and request.args.get('year'): # Check if form was submitted
         outstanding_customers = outstanding_customers_query.order_by(Customer.name).all()
-    
+
     return render_template('reports.html',
                            report_type='outstanding',
                            selected_month_name=selected_month_name,
@@ -502,9 +502,9 @@ def collections_report():
     total_cash = 0
     total_online = 0
     grand_total = 0
-    
+
     s_date, e_date = None, None
-    
+
     # Only process if the form was submitted (i.e., dates are present in args)
     form_submitted = bool(start_date_str and end_date_str)
 
@@ -519,7 +519,7 @@ def collections_report():
         except (ValueError, TypeError): # Added TypeError for None
             flash('Invalid end date format.', 'warning')
             form_submitted = False # Invalidate submission
-    
+
         if form_submitted and s_date and e_date:
             if s_date > e_date:
                 flash('Start date cannot be after end date.', 'warning')
@@ -528,7 +528,7 @@ def collections_report():
                     Payment.payment_date >= s_date,
                     Payment.payment_date <= e_date
                 ).order_by(Payment.payment_date.asc(), Payment.id.asc())
-                
+
                 collections_data = query.all()
 
                 for p in collections_data:
@@ -537,7 +537,7 @@ def collections_report():
                     elif p.payment_method == 'Online':
                         total_online += p.amount_paid
                 grand_total = total_cash + total_online
-    
+
     return render_template('reports.html',
                            report_type='collections',
                            start_date=start_date_str, 
@@ -569,6 +569,6 @@ if __name__ == '__main__':
     if not os.path.exists(db_path):
         with app.app_context():
             print(f"Database not found at {db_path}. Creating tables...")
-            db.create_all()
+            db.create_all()Add commentMore actions
             print("Database tables created.")
     app.run(debug=True)
