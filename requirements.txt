@@ -1,5 +1,5 @@
 Flask
 Flask-SQLAlchemy
 gunicorn
-waitress
+psycopg2-binary
 
