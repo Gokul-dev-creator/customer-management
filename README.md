@@ -35,31 +35,62 @@ A web-based customer management and payment collection dashboard designed primar
   - Responsive Bootstrap interface with icons, navigation bar, and alert messages.
   - Uses Select2 for enhanced dropdowns.
 
-## Installation
+## 🛠️ Installation Guide
 
-1. **Clone the repository**
-   ```
-   git clone https://github.com/Gokul-dev-creator/customer-management.git
-   cd customer-management
-   ```
+Follow the steps below to install and run the Cable-pro web application on your local machine.
 
-2. **Install dependencies**
-   ```
-   pip install -r requirements.txt
-   ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Gokul-dev-creator/Cable-pro.git
+cd Cable-pro
 
-3. **Set up the database**
-   - The app uses Flask-SQLAlchemy and `psycopg2-binary` for PostgreSQL.
-   - See `app.py` for database creation CLI commands.
+2. Create and Activate a Virtual Environment (Recommended)
 
-4. **Run the application**
-   ```
-   flask run
-   ```
-   Or use gunicorn for production:
-   ```
-   gunicorn app:app
-   ```
+# Create virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# For Windows:
+venv\Scripts\activate
+
+# For macOS/Linux:
+source venv/bin/activate
+
+3. Install Python Dependencies
+
+Make sure pip is up to date and install required packages:
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+4. Set Environment Variables for Flask
+
+# On Windows
+set FLASK_APP=app.py
+set FLASK_ENV=development
+
+# On macOS/Linux
+export FLASK_APP=app.py
+export FLASK_ENV=development
+
+5. Initialize the Database
+
+The app uses SQLite by default. Run the following to create the database:
+
+flask shell
+>>> from app import db
+>>> db.create_all()
+>>> exit()
+
+6. Run the Flask Application
+
+flask run
+
+7. Access the Web App
+
+Open your browser and visit:
+
+http://127.0.0.1:5000
 
 ## Technologies Used
 
