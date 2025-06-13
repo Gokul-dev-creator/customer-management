@@ -73,9 +73,7 @@ flask shell
 >>> exit()
 
 6.Run the Flask Application
-```bash
- flask run
-```or
+
 ```bash
 python app.py
 ```
