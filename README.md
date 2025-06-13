@@ -37,28 +37,28 @@ A web-based customer management and payment collection dashboard designed primar
 
 🛠️ Installation Guide ✅
 Follow the steps below to install and run the Cable-pro web application on your local machine.
-1. Clone the Repository
+# 1.Clone the Repository
 git clone https://github.com/Gokul-dev-creator/Cable-pro.git
 cd Cable-pro
 
-2. Create and Activate a Virtual Environment (Recommended)
-# Create virtual environment
+# 2. Create and Activate a Virtual Environment (Recommended)
+## Create virtual environment
 python -m venv venv
 
-# Activate the virtual environment
-# For Windows:
-venv\Scripts\activate
+## Activate the virtual environment
+ For Windows:
+```bash venv\Scripts\activate```
 
-# For macOS/Linux:
-source venv/bin/activate
+ For macOS/Linux:
+ ```baash source venv/bin/activate```
 
-3.Install Python Dependencies
-# Upgrade pip and install dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
+# 3.Install Python Dependencies
+## Upgrade pip and install dependencies
+```bash pip install --upgrade pip```
+```bash pip install -r requirements.txt```
 
-4.Set Environment Variables for Flask
-# On Windows
+# 4.Set Environment Variables for Flask
+## On Windows
 set FLASK_APP=app.py
 set FLASK_ENV=development
 
@@ -68,16 +68,17 @@ export FLASK_ENV=development
 
 5.Initialize the Database
 flask shell
+
+```bash
 >>> from app import db
 >>> db.create_all()
 >>> exit()
-
+```
 6.Run the Flask Application
 
 ```bash
 python app.py
 ```
-
 
 
 
