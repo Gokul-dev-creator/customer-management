@@ -73,9 +73,15 @@ flask shell
 >>> exit()
 
 6.Run the Flask Application
-flask run
-or
+```bash
+ flask run
+```or
+```bash
 python app.py
+```
+
+
+
 
 7. Access the Web App
    Open your browser and go to:
