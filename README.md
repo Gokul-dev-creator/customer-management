@@ -95,3 +95,6 @@ Feel free to fork and submit pull requests!
 ## License
 
 MIT License
+
+
+https://chatgpt.com/share/684b96aa-0574-8000-a20a-975b896b36bf
