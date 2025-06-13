@@ -2,6 +2,8 @@
 
 A web-based customer management and payment collection dashboard designed primarily for cable operators, built with Flask (Python) and Bootstrap (HTML/CSS). This application streamlines the management of customers, tracks payments, generates reports, and provides actionable business insights.
 
+#preview <img src="https://github.com/Gokul-dev-creator/Cable-pro/blob/main/static/images/preview.PNG">
+
 ## Features
 
 - **Dashboard Overview**
