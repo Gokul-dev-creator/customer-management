@@ -35,50 +35,52 @@ A web-based customer management and payment collection dashboard designed primar
   - Responsive Bootstrap interface with icons, navigation bar, and alert messages.
   - Uses Select2 for enhanced dropdowns.
 
-Installation
-Clone the repository
-git clone https://github.com/Gokul-dev-creator/customer-management.git
-cd customer-management
-Use code with caution.
-Bash
-Create a virtual environment (recommended)
+🛠️ Installation Guide ✅
+Follow the steps below to install and run the Cable-pro web application on your local machine.
+1. Clone the Repository
+git clone https://github.com/Gokul-dev-creator/Cable-pro.git
+cd Cable-pro
+
+2. Create and Activate a Virtual Environment (Recommended)
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-Use code with caution.
-Bash
-Install dependencies
+
+# Activate the virtual environment
+# For Windows:
+venv\Scripts\activate
+
+# For macOS/Linux:
+source venv/bin/activate
+
+3.Install Python Dependencies
+# Upgrade pip and install dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
-Use code with caution.
-Bash
-Configure the database connection
-This application requires a DATABASE_URL environment variable to connect to your PostgreSQL database. You can set this in your shell or use a .env file.
-Create a file named .env in the project root and add the following line, replacing the values with your actual database credentials:
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME"
-Use code with caution.
-Example: DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/customers_db"
-Set up the database schema
-The application includes a Flask CLI command to initialize the database tables. Run the following command:
-flask init-db
-Use code with caution.
-Bash
-(Note: Check app.py if a different custom command is used for database creation.)
-Running the Application
-You can run the app using the built-in Flask development server or a production-ready server like Gunicorn.
-For Development:
+
+4.Set Environment Variables for Flask
+# On Windows
+set FLASK_APP=app.py
+set FLASK_ENV=development
+
+# On macOS/Linux
+export FLASK_APP=app.py
+export FLASK_ENV=development
+
+5.Initialize the Database
+flask shell
+>>> from app import db
+>>> db.create_all()
+>>> exit()
+
+6.Run the Flask Application
 flask run
-Use code with caution.
-Bash
-The application will be available at http://127.0.0.1:5000.
-For Production (with Gunicorn):
-gunicorn --workers 3 app:app
-Use code with caution.
-Bash
-Contributing
-Contributions are welcome! Please feel free to open an issue or submit a pull request.
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-31.2s
-Start typing a prompt
+or
+python app.py
+
+7. Access the Web App
+   Open your browser and go to:
+http://127.0.0.1:5000
+
 
 
 ## Technologies Used
@@ -88,13 +90,5 @@ Start typing a prompt
 - JavaScript (jQuery, Select2)
 - PostgreSQL (via psycopg2)
 
-## Contributing
-
-Feel free to fork and submit pull requests!
-
-## License
-
-MIT License
 
 
-https://chatgpt.com/share/684b96aa-0574-8000-a20a-975b896b36bf
